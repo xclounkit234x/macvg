@@ -1,627 +1,146 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <!-- about:blank cloaker (optional soft cloak on first load) -->
     <script>
-(function () {
-  "use strict";
-  function cleanMarker() {
-    try {
-      var u = new URL(location.href);
-      u.searchParams.delete("x");
-      var h = u.hash || "";
-      h = h.replace(/([#&])x=1\b/g, "$1").replace(/[#&]+$/, "").replace(/^#&/, "#");
-      if (h === "#") h = "";
-      u.hash = h;
-      history.replaceState(null, "", u.pathname + u.search + (u.hash || ""));
-    } catch (_) {}
-  }
-
-  try {
-    if (window !== window.top) {
-      var h = String(location.hash || "");
-      var q = String(location.search || "");
-      var marked = h.indexOf("x=1") !== -1 || q.indexOf("x=1") !== -1;
-      try {
-        var fe = window.frameElement;
-        if (fe && fe.getAttribute("x") === "1") marked = true;
-      } catch (_) {}
-      if (marked) {
-        cleanMarker();
-        return;
-      }
-      return;
-    }
-  } catch (_) {
-    return;
-  }
-
-  var pageUrl = location.href;
-  try {
-    var u = new URL(pageUrl);
-    u.searchParams.set("x", "1");
-    pageUrl = u.toString();
-  } catch (_) {
-    pageUrl += (pageUrl.indexOf("?") >= 0 ? "&" : "?") + "x=1";
-  }
-
-  var tabTitle = "\u200B";
-  var favicon =
-    "data:image/svg+xml," +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg"/>');
-
-  function escAttr(s) {
-    return String(s)
-      .replace(/&/g, "&amp;")
-      .replace(/"/g, "&quot;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;");
-  }
-
-  var allow =
-    "accelerometer *; autoplay *; camera *; clipboard-read *; clipboard-write *; " +
-    "display-capture *; encrypted-media *; fullscreen *; geolocation *; gyroscope *; " +
-    "microphone *; midi *; payment *; picture-in-picture *; publickey-credentials-get *; " +
-    "screen-wake-lock *; serial *; usb *; web-share *; xr-spatial-tracking *";
-
-  var html =
-    "<!DOCTYPE html><html><head><meta charset=\"utf-8\">" +
-    "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
-    "<title>" + tabTitle + "</title>" +
-    "<link rel=\"icon\" href=\"" + favicon + "\">" +
-    "<style>html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000}" +
-    "iframe{border:0;width:100%;height:100%;display:block;position:fixed;inset:0}</style>" +
-    "</head><body>" +
-    "<iframe x=\"1\" id=\"c\" src=\"" + escAttr(pageUrl) + "\" " +
-    "allow=\"" + allow + "\" allowfullscreen=\"true\" " +
-    "referrerpolicy=\"no-referrer-when-downgrade\"></iframe>" +
-    "<script>(function(){" +
-    "document.title=\"\\u200B\";" +
-    "window.addEventListener(\"beforeunload\",function(e){e.preventDefault();e.returnValue=\"\";return \"\";});" +
-    "setInterval(function(){if(document.title!==\"\\u200B\")document.title=\"\\u200B\";},800);" +
-    "})();<\\/script>" +
-    "</body></html>";
-
-  var blob = new Blob([html], { type: "text/html;charset=utf-8" });
-  location.replace(URL.createObjectURL(blob));
-})();
-</script>
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5598129470490010"
-      crossorigin="anonymous"
-    ></script>
-    <!-- Google tag (gtag.js) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-Y71QM9DR66"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-
-      gtag("config", "G-Y71QM9DR66");
+      (function () {
+        "use strict";
+        try {
+          if (window !== window.top) return;
+          var marked =
+            (location.hash || "").indexOf("x=1") !== -1 ||
+            (location.search || "").indexOf("x=1") !== -1;
+          if (marked) {
+            try {
+              var u = new URL(location.href);
+              u.searchParams.delete("x");
+              history.replaceState(null, "", u.pathname + u.search + (u.hash || "").replace(/x=1/, ""));
+            } catch (_) {}
+            return;
+          }
+        } catch (_) {
+          return;
+        }
+      })();
     </script>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title class="cloak">Home | MacVG</title>
-    <link class="favicon" rel="icon" type="image/x-icon" href="/logo.png" />
-    <link href="style.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="games.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title class="cloak">Xclounkit234X's N3XN x MacVG</title>
+    <link class="favicon" rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23a78bfa'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='%230b0b14' font-size='14' font-family='sans-serif' font-weight='700'%3EN3%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="n3xn.css" />
+    <script src="https://cdn.jsdelivr.net/particles.js/latest/particles.min.js" defer></script>
   </head>
   <body>
-    <nav class="nav" id="nav">
-      <div class="overflowm shoot" id="overflowm">
-        <img src="media/bars-solid.svg" alt="Menu" class="shoot" />
-      </div>
-      <a href="/macvg/" class="logo2" style="background-color: transparent">
-        <img src="/macvg/media/macvg-logo.png" alt="MacVG Logo" />
-      </a>
-      <a href="new.html" class="nav-link">New</a>
-      <a href="trending.html" class="nav-link">Trending</a>
-      <a href="recent.html" class="nav-link">Recent</a>
-      <a href="/macvg/settings.html" class="nav-link">Settings</a>
-      <div class="right">
-        <div class="select help-menu">
-          <span class="help-label help-menu">Originals</span>
-          <img src="media/caret.svg" class="caret help-menu" id="caret" />
-          <ul id="cats" class="cats help-menu">
-            <a href="/macvg/originals/atomic/" target="_blank"
-              >Atomic Clicker</a
-            >
-            <a href="/macvg/originals/macboard/" target="_blank">MacBoard</a>
-          </ul>
-        </div>
-        <div class="select help-menu">
-          <span class="help-label help-menu">Help</span>
-          <img src="media/caret.svg" class="caret help-menu" id="caret" />
-          <ul id="cats" class="cats help-menu">
-            <a href="/macblog/projects/macvg/" target="_blank">About</a>
-            <a href="/macblog/updates/macvg/" target="_blank">Updates</a>
-            <a href="/macblog/projects/macvg/" target="_blank">Docs</a>
-            <a href="https://forms.gle/UpHgbAmLtUPCD5bs8" target="_blank"
-              >Feedback</a
-            >
-          </ul>
-        </div>
-        <img src="media/profile.svg" class="profile" id="profile" />
-      </div>
-    </nav>
-    <div class="macsidebar" id="sidebar">
-      <a href="/"><img src="/logo.png" alt="" /></a>
-      <a href="/macideas/"><img src="/MacIdeas/Logo.png" alt="" /></a>
-      <a href="/maclearn/"><img src="/MacLearn/Logo.png" alt="" /></a>
-      <a href="/mactime/"><img src="/MacTime/Logo.png" alt="" /></a>
-      <a href="/macvg/"><img src="/MacVG/Logo.png" alt="" /></a>
-      <a href="/macblog/"><img src="/MacBlog/Logo.png" alt="" /></a>
-    </div>
-    <div class="modal-background">
-      <div class="modal">
-        <h2 class="modal-title">MacVG Winter Update</h2>
-        <img src="media/update.jpg" class="modal-img" />
-        <p class="modal-des">
-          HUGE UPDATE: VERSION 3.0, 40+ new games, new features, logo,
-          improvements, fixes, removed features, and more!
-        </p>
-        <a
-          href="/macblog/updates/macvg/2025/winter.html"
-          class="modal-link"
-          target="_blank"
-        >
-          What's new
+    <div id="particles-js" aria-hidden="true"></div>
+
+    <div class="n3xn-shell">
+      <nav class="n3xn-nav">
+        <a class="n3xn-logo" href="./">
+          <div class="n3xn-logo-mark">N3</div>
+          <div>
+            N3XN x MacVG
+            <span class="sub">Xclounkit234X</span>
+          </div>
         </a>
+        <div class="n3xn-nav-links">
+          <a href="#clients" class="active">Clients</a>
+          <a href="#games">Games</a>
+          <a href="#random">Random</a>
+        </div>
+        <div class="n3xn-nav-right">
+          <button type="button" class="n3xn-icon-btn" id="btnSettings" title="Settings">⚙</button>
+        </div>
+      </nav>
+
+      <main class="n3xn-main">
+        <header class="n3xn-hero">
+          <h1>Xclounkit234X's N3XN x MacVG</h1>
+          <p>Glass hub for browser games &amp; Eagler clients — fast filters, cloaking, and curated launches.</p>
+        </header>
+
+        <!-- Clients -->
+        <section class="n3xn-section" id="clients">
+          <div class="n3xn-section-head">
+            <div>
+              <h2>Featured by XK — Eagler Clients</h2>
+              <p>Local packs only. Names &amp; descriptions from the manifest.</p>
+            </div>
+          </div>
+          <div id="clientsStatus" class="n3xn-status" role="status"></div>
+          <div class="n3xn-grid" id="clientsGrid"></div>
+        </section>
+
+        <!-- Toolbar + games -->
+        <section class="n3xn-section" id="games">
+          <div class="n3xn-section-head">
+            <div>
+              <h2>Game Library</h2>
+              <p>Loaded dynamically from the games list.</p>
+            </div>
+          </div>
+
+          <div class="n3xn-toolbar glass">
+            <div class="n3xn-search">
+              <input type="search" id="searchInput" placeholder="Search games…" autocomplete="off" />
+              <button type="button" class="clear" id="searchClear" aria-label="Clear">✕</button>
+            </div>
+            <button type="button" class="n3xn-chip" id="btnRandom" title="Random game">🎲 Random</button>
+            <div class="n3xn-chip-row">
+              <button type="button" class="n3xn-chip active" data-filter="all" data-label="All">All</button>
+              <button type="button" class="n3xn-chip" data-filter="featured" data-label="Featured">Featured</button>
+              <button type="button" class="n3xn-chip" data-filter="action" data-label="Action">Action</button>
+              <button type="button" class="n3xn-chip" data-filter="strategy" data-label="Strategy">Strategy</button>
+              <button type="button" class="n3xn-chip" data-filter="casual" data-label="Casual">Casual</button>
+              <button type="button" class="n3xn-chip" data-filter="driving" data-label="Driving">Driving</button>
+              <button type="button" class="n3xn-chip" data-filter="download" data-label="Downloadable">Downloadable</button>
+            </div>
+          </div>
+
+          <div id="gamesStatus" class="n3xn-status" role="status"></div>
+
+          <div class="n3xn-section" id="random">
+            <div class="n3xn-section-head">
+              <h2>Random pick</h2>
+            </div>
+            <div id="randomSlot" class="n3xn-grid" style="max-width: 180px"></div>
+          </div>
+
+          <div class="n3xn-grid" id="gamesGrid"></div>
+        </section>
+      </main>
+
+      <footer class="n3xn-footer">
+        <p>Xclounkit234X's N3XN x MacVG — for personal use.</p>
+      </footer>
+    </div>
+
+    <!-- Settings -->
+    <div class="n3xn-modal-bg" id="settingsModal">
+      <div class="n3xn-modal glass">
+        <h3>Settings</h3>
+        <label for="cloakTitle">Tab title (cloak)</label>
+        <input id="cloakTitle" type="text" placeholder="e.g. Google" />
+        <label for="cloakIcon">Favicon URL</label>
+        <input id="cloakIcon" type="text" placeholder="https://…/favicon.ico" />
+        <div class="row">
+          <button type="button" class="n3xn-btn" id="btnSaveCloak">Save cloak</button>
+          <button type="button" class="n3xn-btn ghost" data-preset="Google">Google</button>
+          <button type="button" class="n3xn-btn ghost" data-preset="Canva">Canva</button>
+          <button type="button" class="n3xn-btn ghost" data-preset="Classroom">Classroom</button>
+        </div>
+        <label for="panicKey">Panic key</label>
+        <input id="panicKey" type="text" maxlength="2" placeholder="`" value="`" />
+        <label for="panicUrl">Panic redirect URL</label>
+        <input id="panicUrl" type="text" placeholder="https://www.google.com" />
+        <div class="row">
+          <button type="button" class="n3xn-btn" id="btnSavePanic">Save panic</button>
+          <button type="button" class="n3xn-btn ghost" id="btnCloseSettings">Close</button>
+        </div>
       </div>
     </div>
-    <script>
-      let updateModal = document.querySelector(".modal-background");
-      if (localStorage.macvgmodal) {
-        updateModal.style.display = "none";
-      }
-    </script>
-    <div class="wrap" id="wrap">
-      <header class="homeheader">
-        <div class="title" name="Welcome to MacVG!">Welcome to MacVG!</div>
-        <div class="sub">
-          <b
-            style="
-              font-size: 23px;
-              margin-bottom: 15px;
-              display: block;
-              font-style: italic;
-            "
-            >Fun, redefined:</b
-          >
-          Hundreds of games, countless features, endless play!
-        </div>
-      </header>
-      <div class="functions" id="functions">
-        <input
-          type="text"
-          id="searchInput"
-          oninput="search()"
-          autocomplete="off"
-          placeholder="Search All Games"
-        />
-        <button class="search-clear" id="search-clear">
-          <img src="media/close.svg" />
-        </button>
-        <button class="random" id="random" title="Random Game Selector">
-          🎲
-        </button>
-      </div>
-      <div class="filters">
-        <div class="filter" id="sort">
-          <div class="label">Sort By: Name</div>
-          <div class="filter-list">
-            <li class="filter-item" id="sort-name">Name</li>
-            <li class="filter-item" id="sort-catagory">Category</li>
-          </div>
-        </div>
-        <div class="filter" id="filter">
-          <div class="label">Filter All (420)</div>
-          <div class="filter-list">
-            <li class="filter-item" id="filter-all">All</li>
-            <li class="filter-item" id="filter-featured">Featured (50)</li>
-            <li class="filter-item" id="filter-action">Action (165)</li>
-            <li class="filter-item" id="filter-strategy">Strategy (136)</li>
-            <li class="filter-item" id="filter-casual">Casual (64)</li>
-            <li class="filter-item" id="filter-driving">Driving (55)</li>
-            <li class="filter-item" id="filter-download">Downloadable (68)</li>
-          </div>
-        </div>
-        <button class="filter direction" id="direction">
-          <img src="media/up.svg" />
-        </button>
-      </div>
-      <div class="games-container" id="favoriteList" style="position: relative">
-        <button
-          id="fvrbtn"
-          style="position: absolute; top: 0; right: 0"
-          title="Clear Favorites"
-        >
-          <img src="media/trash-solid.svg" />
-        </button>
-      </div>
-      <div class="games-container" id="randomList"></div>
-    <!-- Featured by XK (Eagler clients & specials) -->
-<div id="xkSection" style="display:none; margin-bottom: 24px;">
-  <h2 style="
-    color: var(--link, #e18b09);
-    font-size: 1.4rem;
-    margin: 0 0 12px 0;
-    padding-left: 4px;
-  ">Featured Minecraft by xclounkit234x(the games master)</h2>
-  <center><p style="
-    color: var(--text-color, #ccc);
-    font-size: 0.95rem;
-    margin: 0 0 14px 4px;
-    opacity: 0.85;
-  ">Eagler clients, special builds & curated picks</p></center>
-  <div class="games-container" id="xkFeatured"></div>
-</div>
-      <div class="games-container" id="list"></div>
-      
-    </div>
-    <footer class="footer">
-      © 2024 <a href="/">MacWeb</a
-      ><span style="color: black; user-select: none; background-color: black"
-        >MacVG</span
-      >
-      All rights reserved<br />
-      Have fun playing these unblocked fun games!🎮🎮🎮<br
-        style="margin-bottom: 10px"
-      />
-    </footer>
-    <script src="/macvg/app.js"></script>
-<script>
-/**
- * MacVG fix by XK — dynamic games + random + counts + Featured by XK
- * Paste AFTER app.js
- */
-(function () {
-  "use strict";
 
-  // ========== CONFIG: Featured by XK ==========
-  // Option A: list game IDs from games.json
-  const XK_FEATURED_IDS = [
-    // e.g. 147, 148, 149  — Minecraft / Eagler-style
-    // add more IDs here
-  ];
-
-  // Option B: match by name (case-insensitive substring)
-  const XK_NAME_MATCHES = [
-    "eagler",
-    "minecraft 1.5",
-    "minecraft 1.8",
-    "minecraft classic",
-    "paper minecraft",
-    // add more keywords
-  ];
-
-  // Option C: if a game in games.json has "xkFeatured": true it is included automatically
-
-  // ============================================
-
-  let everythingArray = [];
-  let secondArray = [];
-  let filterGamesList = null;
-
-  function getCategory(g) {
-    return (g.category || g.catagory || "").toLowerCase();
-  }
-
-  function isXkFeatured(g) {
-    if (g.xkFeatured === true) return true;
-    if (XK_FEATURED_IDS.includes(Number(g.id))) return true;
-    const name = (g.name || "").toLowerCase();
-    return XK_NAME_MATCHES.some((m) => name.includes(m.toLowerCase()));
-  }
-
-  function makeGameBox(game) {
-    const box = document.createElement("a");
-    box.classList.add("game");
-    box.id = "game" + game.id;
-    box.textContent = game.name;
-    box.setAttribute("name", game.name);
-
-    const thumbUrl = (game.link || "") + (game.thumb || "");
-    if (thumbUrl) {
-      box.style.backgroundImage =
-        "linear-gradient(rgba(40,40,40,0.2), rgba(20,20,20,0.9)), url(\"" +
-        thumbUrl +
-        "\")";
-    }
-
-    box.addEventListener("click", function (e) {
-      e.preventDefault();
-      const params = new URLSearchParams({ target: String(game.id) });
-      window.location.href = "game.html?" + params.toString();
-    });
-    return box;
-  }
-
-  function arrangeBoxes(games) {
-    if (!filterGamesList) return;
-    filterGamesList.innerHTML = "";
-    games.forEach(function (g) {
-      filterGamesList.appendChild(makeGameBox(g));
-    });
-  }
-
-  function updateFilterCounts() {
-    const counts = {
-      all: everythingArray.length,
-      featured: 0,
-      action: 0,
-      strategy: 0,
-      casual: 0,
-      driving: 0,
-      download: 0,
-    };
-    everythingArray.forEach(function (g) {
-      if (g.featured) counts.featured++;
-      if (g.download) counts.download++;
-      const c = getCategory(g);
-      if (counts[c] !== undefined) counts[c]++;
-    });
-
-    const setLabel = function (id, text) {
-      const el = document.getElementById(id);
-      if (el) el.textContent = text;
-    };
-
-    const filterLabel = document.querySelector("#filter .label");
-    if (filterLabel) filterLabel.textContent = "Filter All (" + counts.all + ")";
-
-    setLabel("filter-all", "All");
-    setLabel("filter-featured", "Featured (" + counts.featured + ")");
-    setLabel("filter-action", "Action (" + counts.action + ")");
-    setLabel("filter-strategy", "Strategy (" + counts.strategy + ")");
-    setLabel("filter-casual", "Casual (" + counts.casual + ")");
-    setLabel("filter-driving", "Driving (" + counts.driving + ")");
-    setLabel("filter-download", "Downloadable (" + counts.download + ")");
-  }
-
-  function renderXkSection() {
-    const section = document.getElementById("xkSection");
-    const container = document.getElementById("xkFeatured");
-    if (!section || !container) return;
-
-    const xkGames = everythingArray.filter(isXkFeatured);
-    container.innerHTML = "";
-    if (xkGames.length === 0) {
-      section.style.display = "none";
-      return;
-    }
-    section.style.display = "block";
-    xkGames.forEach(function (g) {
-      container.appendChild(makeGameBox(g));
-    });
-  }
-
-  function renderFavorites() {
-    const favoriteList = document.getElementById("favoriteList");
-    if (!favoriteList) return;
-
-    const raw = localStorage.getItem("favorites");
-    if (!raw || raw === "") {
-      favoriteList.style.display = "none";
-      return;
-    }
-
-    const ids = raw.split(",").map(function (s) {
-      return s.trim();
-    }).filter(Boolean);
-
-    favoriteList.innerHTML = "";
-    const trash = document.createElement("button");
-    trash.id = "fvrbtn";
-    trash.title = "Clear Favorites";
-    trash.style.cssText = "position:absolute;top:0;right:0";
-    trash.innerHTML = '<img src="media/trash-solid.svg" alt="Clear" />';
-    trash.addEventListener("click", function () {
-      if (confirm("Are you sure you want to remove all your favorite games?")) {
-        localStorage.removeItem("favorites");
-        favoriteList.style.display = "none";
-        favoriteList.innerHTML = "";
-      }
-    });
-    favoriteList.appendChild(trash);
-
-    let any = false;
-    everythingArray.forEach(function (game) {
-      if (ids.includes(String(game.id))) {
-        any = true;
-        favoriteList.appendChild(makeGameBox(game));
-      }
-    });
-    favoriteList.style.display = any ? "flex" : "none";
-  }
-
-  // Override broken app.js helpers (category typo, hardcoded random, etc.)
-  window.sortStuff = function (targetArray, key) {
-    let list = Array.isArray(targetArray) ? targetArray.slice() : everythingArray.slice();
-
-    // If we were given names only (old bug), recover objects
-    if (list.length && typeof list[0] === "string") {
-      list = everythingArray.filter(function (g) {
-        return list.includes(g.name);
-      });
-    }
-
-    if (key === "name") {
-      list.sort(function (a, b) {
-        return a.name.toUpperCase().localeCompare(b.name.toUpperCase());
-      });
-    } else if (key === "category" || key === "catagory") {
-      list.sort(function (a, b) {
-        return getCategory(a).localeCompare(getCategory(b));
-      });
-    } else if (key === "direction") {
-      list.reverse();
-    }
-
-    secondArray = list;
-    arrangeBoxes(list);
-  };
-
-  window.filterStuff = function (colorArray, color) {
-    let source = everythingArray;
-    let list;
-
-    if (color === "action" || color === "strategy" || color === "casual" || color === "driving") {
-      list = source.filter(function (g) {
-        return getCategory(g) === color;
-      });
-    } else if (color === "featured") {
-      list = source.filter(function (g) {
-        return !!g.featured;
-      });
-    } else if (color === "download") {
-      list = source.filter(function (g) {
-        return !!g.download;
-      });
-    } else {
-      list = source.slice();
-    }
-
-    secondArray = list;
-    arrangeBoxes(list);
-  };
-
-  // Fixed random picker — uses actual visible list length
-  window.select = function () {
-    const listEl = document.getElementById("list");
-    const randomList = document.getElementById("randomList");
-    if (!listEl || !randomList) return;
-
-    const items = Array.from(listEl.querySelectorAll("a.game"));
-    if (items.length === 0) return;
-
-    const picked = items[Math.floor(Math.random() * items.length)];
-    const id = picked.id.replace(/^game/, "");
-    const clone = picked.cloneNode(true);
-    clone.style.paddingBlock = "10px";
-    clone.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = "game.html?target=" + encodeURIComponent(id);
-    });
-    randomList.innerHTML = "";
-    randomList.appendChild(clone);
-  };
-
-  function wireFilters() {
-    const filterAll = document.getElementById("filter-all");
-    const filterFeatured = document.getElementById("filter-featured");
-    const filterAction = document.getElementById("filter-action");
-    const filterStrategy = document.getElementById("filter-strategy");
-    const filterCasual = document.getElementById("filter-casual");
-    const filterDriving = document.getElementById("filter-driving");
-    const filterDownload = document.getElementById("filter-download");
-    const sortName = document.getElementById("sort-name");
-    const sortCatagory = document.getElementById("sort-catagory");
-    const directionBtn = document.getElementById("direction");
-    const filterLabel = document.querySelector("#filter .label");
-    const sortLabel = document.querySelector("#sort .label");
-
-    document.addEventListener("click", function (e) {
-      const t = e.target;
-      if (!t) return;
-
-      if (t === filterAction) {
-        filterStuff(everythingArray, "action");
-        if (filterLabel) filterLabel.textContent = "Action & Adventure";
-      } else if (t === filterStrategy) {
-        filterStuff(everythingArray, "strategy");
-        if (filterLabel) filterLabel.textContent = "Strategy & Puzzle";
-      } else if (t === filterFeatured) {
-        filterStuff(everythingArray, "featured");
-        if (filterLabel) filterLabel.textContent = "Featured Games";
-      } else if (t === filterCasual) {
-        filterStuff(everythingArray, "casual");
-        if (filterLabel) filterLabel.textContent = "Casual & Idle";
-      } else if (t === filterDriving) {
-        filterStuff(everythingArray, "driving");
-        if (filterLabel) filterLabel.textContent = "Driving & Sports";
-      } else if (t === filterDownload) {
-        filterStuff(everythingArray, "download");
-        if (filterLabel) filterLabel.textContent = "Downloadable Games";
-      } else if (t === filterAll) {
-        sortStuff(everythingArray, "name");
-        if (filterLabel) filterLabel.textContent = "Filter All (" + everythingArray.length + ")";
-      } else if (t === sortName) {
-        if (sortLabel) sortLabel.textContent = "Sort By: Name";
-        sortStuff(secondArray.length ? secondArray : everythingArray, "name");
-      } else if (t === sortCatagory) {
-        if (sortLabel) sortLabel.textContent = "Sort By: Category";
-        sortStuff(secondArray.length ? secondArray : everythingArray, "category");
-      }
-    });
-
-    if (directionBtn) {
-      directionBtn.style.transform = "rotateX(180deg)";
-      directionBtn.addEventListener("click", function () {
-        const img = directionBtn.querySelector("img");
-        if (img) {
-          img.style.transform =
-            img.style.transform === "rotateX(180deg)" ? "rotateX(0deg)" : "rotateX(180deg)";
-        }
-        sortStuff(secondArray.length ? secondArray : everythingArray, "direction");
-      });
-    }
-
-    const randomBtn = document.getElementById("random");
-    if (randomBtn) {
-      randomBtn.onclick = null;
-      randomBtn.addEventListener("click", select);
-    }
-  }
-
-  function boot() {
-    filterGamesList = document.getElementById("list");
-    if (!filterGamesList) {
-      console.error("[XK] #list not found");
-      return;
-    }
-
-    fetch("games.json")
-      .then(function (r) {
-        if (!r.ok) throw new Error("games.json HTTP " + r.status);
-        return r.json();
-      })
-      .then(function (data) {
-        everythingArray = Array.isArray(data.games) ? data.games : [];
-        // Normalize category key so old code paths don't break
-        everythingArray.forEach(function (g) {
-          if (g.category == null && g.catagory != null) g.category = g.catagory;
-        });
-        secondArray = everythingArray.slice();
-
-        window.everythingArray = everythingArray;
-        window.secondArray = secondArray;
-        window.filterGamesList = filterGamesList;
-
-        updateFilterCounts();
-        renderXkSection();
-        sortStuff(everythingArray, "name");
-        renderFavorites();
-        wireFilters();
-
-        console.log("[XK] Loaded", everythingArray.length, "games");
-      })
-      .catch(function (err) {
-        console.error("[XK] Failed to load games.json:", err);
-      });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-})();
-</script>
+    <script src="n3xn.js" defer></script>
   </body>
 </html>
