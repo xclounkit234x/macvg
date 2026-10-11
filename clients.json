@@ -1,5 +1,5 @@
 {
-  "basePath": "thebin/clients",
+  "basePath": "/thebin/clients",
   "clients": [
     {
       "file": "Eaglercraft-26.2.html",
