@@ -182,10 +182,10 @@ function sortStuff(targetArray, key) {
       finalGames.push(item.name);
     });
     arrangeBoxes(finalGames, finalArrayIds);
-  } else if (key === "catagory") {
+  } else if (key === "category") {
     targetArray.sort((a, b) => {
-      const nameA = a.catagory.toUpperCase();
-      const nameB = b.catagory.toUpperCase();
+      const nameA = a.category.toUpperCase();
+      const nameB = b.category.toUpperCase();
       if (nameA < nameB) {
         return -1;
       }
@@ -225,7 +225,7 @@ function filterStuff(colorArray, color) {
     let finalArray = [];
     let finalArrayIds = [];
     colorArray.forEach((item) => {
-      if (item.catagory === color) {
+      if (item.category === color) {
         finalArray.push(item.name);
         finalArrayIds.push(item.id);
       }
