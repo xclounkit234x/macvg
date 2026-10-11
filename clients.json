@@ -1,0 +1,155 @@
+{
+  "basePath": "e/clients/",
+  "clients": [
+    {
+      "file": "Eaglercraft-26.2.html",
+      "name": "Eaglercraft 26.2",
+      "group": "Classic",
+      "desc": "Latest-gen browser Minecraft client (26.2 build)."
+    },
+    {
+      "file": "Eaglercraft-1.12.html",
+      "name": "Eaglercraft 1.12",
+      "group": "Classic",
+      "desc": "Minecraft 1.12 experience in the browser."
+    },
+    {
+      "file": "Resent-Client-v5.1.html",
+      "name": "Resent Client v5.1",
+      "group": "Normal",
+      "desc": "Feature-rich Resent client build."
+    },
+    {
+      "file": "Astra-Client.html",
+      "name": "Astra Client",
+      "group": "Normal",
+      "desc": "Astra client for browser multiplayer."
+    },
+    {
+      "file": "Pixel-Client-1.12.html",
+      "name": "Pixel Client 1.12",
+      "group": "Normal",
+      "desc": "Pixel Client targeting 1.12."
+    },
+    {
+      "file": "Pixel-Client-1.8.8.html",
+      "name": "Pixel Client 1.8.8",
+      "group": "Normal",
+      "desc": "Pixel Client 1.8.8 v2.1.2."
+    },
+    {
+      "file": "DragonX-v5.1.html",
+      "name": "DragonX v5.1",
+      "group": "DragonX",
+      "desc": "DragonX v5.1 utility client."
+    },
+    {
+      "file": "DragonX-v4.html",
+      "name": "DragonX v4",
+      "group": "DragonX",
+      "desc": "DragonX v4 build."
+    },
+    {
+      "file": "DragonX-v3.html",
+      "name": "DragonX v3",
+      "group": "DragonX",
+      "desc": "DragonX V3 Client."
+    },
+    {
+      "file": "DragonX-v2.html",
+      "name": "DragonX v2",
+      "group": "DragonX",
+      "desc": "DragonX v2 (new click GUI)."
+    },
+    {
+      "file": "UwU-Client-Beta-v2.html",
+      "name": "UwU Client Beta v2",
+      "group": "UwU",
+      "desc": "UwU Client beta v2."
+    },
+    {
+      "file": "UwU-Client-v1.html",
+      "name": "UwU Client v1",
+      "group": "UwU",
+      "desc": "UwU Client v1 full build."
+    },
+    {
+      "file": "UwU-Lite-v2.html",
+      "name": "UwU Lite v2",
+      "group": "UwU",
+      "desc": "Lightweight UwU Lite v2."
+    },
+    {
+      "file": "Justin-Client-v3.html",
+      "name": "Justin Client v3",
+      "group": "Justin",
+      "desc": "Justin Client v3."
+    },
+    {
+      "file": "Justin-Client-v1.2.4.html",
+      "name": "Justin Client v1.2.4",
+      "group": "Justin",
+      "desc": "Justin Client v1.2.4."
+    },
+    {
+      "file": "Shadow-Client-v4.html",
+      "name": "Shadow Client v4",
+      "group": "Shadow",
+      "desc": "Shadow Client v4 International."
+    },
+    {
+      "file": "Shadow-Client-v2.5.html",
+      "name": "Shadow Client v2.5",
+      "group": "Shadow",
+      "desc": "Shadow Client 2.5 (1.8.8 International)."
+    },
+    {
+      "file": "WurstX-Client.html",
+      "name": "WurstX Client",
+      "group": "Utility",
+      "desc": "WurstX Client Beta v1."
+    },
+    {
+      "file": "MoonLight-Client.html",
+      "name": "MoonLight Client",
+      "group": "Utility",
+      "desc": "MoonLight utility client."
+    },
+    {
+      "file": "PiClient.html",
+      "name": "PiClient",
+      "group": "Utility",
+      "desc": "PiClient browser build."
+    },
+    {
+      "file": "Meteor-Client.html",
+      "name": "Meteor Client",
+      "group": "Utility",
+      "desc": "Meteor Client port."
+    },
+    {
+      "file": "Demon-Client.html",
+      "name": "Demon Client",
+      "group": "Utility",
+      "desc": "Demon Client build."
+    },
+    {
+      "file": "Koneclient.html",
+      "name": "Koneclient",
+      "group": "Utility",
+      "desc": "Koneclient 1.8.8 offline."
+    },
+    {
+      "file": "FlameClient-v3.7.html",
+      "name": "FlameClient v3.7",
+      "group": "Utility",
+      "desc": "FlameClient v3.7."
+    },
+    {
+      "file": "Daniel-Client-v1.html",
+      "name": "Daniel Client v1",
+      "group": "Utility",
+      "desc": "Daniel Client v1."
+    }
+  ]
+}
