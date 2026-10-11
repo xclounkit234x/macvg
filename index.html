@@ -3,27 +3,90 @@
 <html lang="en">
   <head>
     <!-- about:blank cloaker (optional soft cloak on first load) -->
-    <script>
-      (function () {
-        "use strict";
-        try {
-          if (window !== window.top) return;
-          var marked =
-            (location.hash || "").indexOf("x=1") !== -1 ||
-            (location.search || "").indexOf("x=1") !== -1;
-          if (marked) {
-            try {
-              var u = new URL(location.href);
-              u.searchParams.delete("x");
-              history.replaceState(null, "", u.pathname + u.search + (u.hash || "").replace(/x=1/, ""));
-            } catch (_) {}
-            return;
-          }
-        } catch (_) {
-          return;
-        }
-      })();
-    </script>
+     <script>
+(function () {
+  "use strict";
+  function cleanMarker() {
+    try {
+      var u = new URL(location.href);
+      u.searchParams.delete("x");
+      var h = u.hash || "";
+      h = h.replace(/([#&])x=1\b/g, "$1").replace(/[#&]+$/, "").replace(/^#&/, "#");
+      if (h === "#") h = "";
+      u.hash = h;
+      history.replaceState("");
+    } catch (_) {}
+  }
+
+  try {
+    if (window !== window.top) {
+      var h = String(location.hash || "");
+      var q = String(location.search || "");
+      var marked = h.indexOf("x=1") !== -1 || q.indexOf("x=1") !== -1;
+      try {
+        var fe = window.frameElement;
+        if (fe && fe.getAttribute("x") === "1") marked = true;
+      } catch (_) {}
+      if (marked) {
+        cleanMarker();
+        return;
+      }
+      return;
+    }
+  } catch (_) {
+    return;
+  }
+
+  var pageUrl = location.href;
+  try {
+    var u = new URL(pageUrl);
+    u.searchParams.set("x", "1");
+    pageUrl = u.toString();
+  } catch (_) {
+    pageUrl += (pageUrl.indexOf("?") >= 0 ? "&" : "?") + "x=1";
+  }
+
+  var tabTitle = "\u200B";
+  var favicon =
+    "data:image/svg+xml," +
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg"/>');
+
+  function escAttr(s) {
+    return String(s)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  var allow =
+    "accelerometer *; autoplay *; camera *; clipboard-read *; clipboard-write *; " +
+    "display-capture *; encrypted-media *; fullscreen *; geolocation *; gyroscope *; " +
+    "microphone *; midi *; payment *; picture-in-picture *; publickey-credentials-get *; " +
+    "screen-wake-lock *; serial *; usb *; web-share *; xr-spatial-tracking *";
+
+  var html =
+    "<!DOCTYPE html><html><head><meta charset=\"utf-8\">" +
+    "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">" +
+    "<title>" + tabTitle + "</title>" +
+    "<link rel=\"icon\" href=\"" + favicon + "\">" +
+    "<style>html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#000}" +
+    "iframe{border:0;width:100%;height:100%;display:block;position:fixed;inset:0}</style>" +
+    "</head><body>" +
+    "<iframe x=\"1\" id=\"c\" src=\"" + escAttr(pageUrl) + "\" " +
+    "allow=\"" + allow + "\" allowfullscreen=\"true\" " +
+    "referrerpolicy=\"no-referrer-when-downgrade\"></iframe>" +
+    "<script>(function(){" +
+    "document.title=\"\\u200B\";" +
+    "window.addEventListener(\"beforeunload\",function(e){e.preventDefault();e.returnValue=\"\";return \"\";});" +
+    "setInterval(function(){if(document.title!==\"\\u200B\")document.title=\"\\u200B\";},800);" +
+    "})();<\\/script>" +
+    "</body></html>";
+
+  var blob = new Blob([html], { type: "text/html;charset=utf-8" });
+  location.replace(URL.createObjectURL(blob));
+})();
+</script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
@@ -57,7 +120,7 @@
       <main class="n3xn-main">
         <header class="n3xn-hero">
           <h1>Xclounkit234X's N3XN x MacVG</h1>
-          <p>Glass hub for browser games &amp; Eagler clients — fast filters, cloaking, and curated launches.</p>
+          <p>GameHub for browser games &amp; Eagler clients — fast filters, cloaking, and curated launches.</p>
         </header>
 
         <!-- Clients -->
