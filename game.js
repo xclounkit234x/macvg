@@ -1,22 +1,41 @@
 
-/* MacVG GX player — ads removed */
+/* MacVG GX player — ads removed, assets from macvg-games.github.io */
+(function () {
+  "use strict";
 
-  // Apply MacVG GX / legacy cloak
-  (function applyPlayerCloak() {
+  var ASSET_BASE = "https://macvg-games.github.io";
+
+  function assetUrl(link, thumb) {
+    link = link || "";
+    thumb = thumb || "";
+    if (/^https?:\/\//i.test(thumb)) return thumb;
+    if (/^https?:\/\//i.test(link)) return link.replace(/\/?$/, "/") + thumb;
+    var path = (String(link).replace(/\/?$/, "/") + thumb).replace(/^\/+/, "");
+    return ASSET_BASE + "/" + path;
+  }
+
+  function playUrl(link) {
+    if (!link) return "";
+    if (/^https?:\/\//i.test(link)) return link;
+    return ASSET_BASE + (link.charAt(0) === "/" ? link : "/" + link);
+  }
+
+  function applyPlayerCloak() {
     try {
       var raw = localStorage.getItem("macvg_cloak") || localStorage.getItem("title") || "";
       if (!raw) return;
       var title, image;
       if (raw.indexOf("|") >= 0) {
         var p = raw.split("|");
-        title = p[0]; image = p[1];
+        title = p[0];
+        image = p[1];
       } else {
         var p2 = raw.split(",");
-        title = p2[0]; image = p2[1];
+        title = p2[0];
+        image = p2[1];
       }
       if (title) {
-        var pageTitle = document.getElementsByTagName("title")[0];
-        if (pageTitle) pageTitle.innerHTML = title;
+        document.title = title;
         var t2 = document.querySelector(".cloak");
         if (t2) t2.textContent = title;
       }
@@ -25,195 +44,171 @@
         if (favicon) favicon.href = image;
       }
     } catch (e) {}
-  })();
+  }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const params = new URLSearchParams(window.location.search);
-  const gameID = params.get("target");
-  let newArray = [];
-  const download = document.getElementById("download");
-  fetch("games.json")
-    .then((response) => response.json())
-    .then((dataa) => {
-      let data = dataa.games;
-      for (var i = 0; i < data.length; i++) {
-        newArray.push(data[i]);
-      }
-      newArray.forEach((game) => {
-        if (game.id == gameID && game.download) {
-          download.addEventListener("click", () => {
-            window.open(
-              `https://macvg-games.github.io/zips/game${gameID}.zip`,
-              "_blank"
-            );
+  applyPlayerCloak();
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var params = new URLSearchParams(window.location.search);
+    var gameID = params.get("target");
+    if (!gameID) {
+      window.location.href = "./";
+      return;
+    }
+
+    var gameName = document.getElementById("game-name");
+    var gameCategory = document.getElementById("game-category");
+    var gameRelease = document.getElementById("game-release");
+    var gameDeveloper = document.getElementById("game-developer");
+    var gamePopularity = document.getElementById("game-popularity");
+    var gameGenre = document.getElementById("game-genre");
+    var gameBuild = document.getElementById("game-build");
+    var gameThumb = document.getElementById("game-thumb");
+    var gameDescription = document.getElementById("game-description");
+    var gameControls = document.getElementById("game-controls");
+    var gameFrame = document.getElementById("game-frame");
+    var download = document.getElementById("download");
+    var fullScreen = document.getElementById("fullscreen");
+    var share = document.getElementById("share");
+    var report = document.getElementById("report");
+    var star = document.getElementById("star");
+    var gameShare = document.getElementById("game-share");
+    var gameShareBtn = document.getElementById("game-share-btn");
+    var gameframeBox = document.getElementById("gameframe");
+
+    var allGames = [];
+
+    fetch("games.json", { cache: "no-store" })
+      .then(function (r) {
+        if (!r.ok) throw new Error("games.json HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        allGames = data.games || [];
+        var game = null;
+        for (var i = 0; i < allGames.length; i++) {
+          if (String(allGames[i].id) === String(gameID)) {
+            game = allGames[i];
+            break;
+          }
+        }
+        if (!game) {
+          if (gameName) gameName.textContent = "Game not found";
+          return;
+        }
+
+        if (gameName) gameName.textContent = game.name || "";
+        if (gameCategory) gameCategory.textContent = game.category || game.catagory || "";
+        if (gameRelease) gameRelease.textContent = game.releaseDate || "";
+        if (gameDeveloper) gameDeveloper.textContent = game.dev || "";
+        if (gamePopularity) gamePopularity.textContent = game.popularity || "";
+        if (gameGenre) gameGenre.textContent = game.genre || "";
+        if (gameBuild) gameBuild.textContent = game.build || "";
+        if (gameDescription) gameDescription.textContent = game.about || "";
+        if (gameThumb) {
+          gameThumb.src = assetUrl(game.link, game.thumb);
+          gameThumb.alt = game.name || "";
+        }
+        if (gameControls) {
+          gameControls.innerHTML = "";
+          var controls = game.controls || [];
+          if (typeof controls === "string") controls = [controls];
+          controls.forEach(function (c) {
+            var li = document.createElement("li");
+            li.textContent = c;
+            gameControls.appendChild(li);
           });
-        } else if (game.id == gameID) {
-          download.style.display = "none";
+        }
+        if (gameFrame) {
+          gameFrame.src = playUrl(game.link);
+        }
+        if (!document.title || document.title === "MacVG GX") {
+          document.title = (game.name || "Game") + " | MacVG GX";
+        }
+
+        if (download) {
+          if (game.download) {
+            download.style.display = "";
+            download.onclick = function () {
+              window.open(ASSET_BASE + "/zips/game" + gameID + ".zip", "_blank");
+            };
+          } else {
+            download.style.display = "none";
+          }
+        }
+      })
+      .catch(function (err) {
+        console.error(err);
+        if (gameName) gameName.textContent = "Failed to load game data";
+      });
+
+    if (fullScreen && gameframeBox) {
+      fullScreen.addEventListener("click", function () {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        } else if (gameframeBox.requestFullscreen) {
+          gameframeBox.requestFullscreen();
+        } else if (gameFrame && gameFrame.requestFullscreen) {
+          gameFrame.requestFullscreen();
         }
       });
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-  //Above is code for download button
-  const gameFrame = document.getElementById("gameframe");
-  const fullScreen = document.getElementById("fullscreen");
-  fullScreen.addEventListener("click", function () {
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-      fullScreen.src = "media/expand.svg";
-    } else {
-      fullScreen.src = "media/compress.svg";
-      gameFrame.requestFullscreen();
     }
-  });
-  //Above is code for full screen
-  const gameShare = document.getElementById("game-share");
-  const gameShareBtn = document.getElementById("game-share-btn");
-  const share = document.getElementById("share");
-  gameShareBtn.addEventListener("click", function () {
-    gameShare.classList.add("none");
-  });
-  share.addEventListener("click", function () {
-    let thing123 = window.location.href;
-    navigator.clipboard.writeText(thing123);
-    gameShare.classList.remove("none");
-  });
-  //Above is code for sharing the game
-  const report = document.getElementById("report");
-  report.addEventListener("click", function () {
-    window.open("https://forms.gle/vKN71eKeMNGiswUY7", "_blank");
-  });
-  //Above is code for reporting the game
-  const star = document.getElementById("star");
-  let existingData = localStorage.getItem("favorites");
-  let favoritesArray = existingData ? existingData.split(",").filter(Boolean) : [];
-  if (favoritesArray.includes(gameID)) {
-    star.src = "media/star-solid.svg";
-  }
-  star.addEventListener("click", function () {
-    if (star.src.includes("star-regular")) {
-      star.src = "media/star-solid.svg";
-      favoritesArray.push(gameID);
-      localStorage.setItem("favorites", favoritesArray.join(","));
-    } else {
-      star.src = "media/star-regular.svg";
-      const index = favoritesArray.indexOf(gameID);
-      favoritesArray.splice(index, 1);
-      localStorage.setItem("favorites", favoritesArray.join(","));
+
+    if (share) {
+      share.addEventListener("click", function () {
+        try {
+          navigator.clipboard.writeText(window.location.href);
+        } catch (e) {}
+        if (gameShare) gameShare.classList.remove("none");
+      });
     }
-  });
-  //Above is code for saving the game to favorites
-  let eRecent = localStorage.getItem("macvgRecents");
-  let recentArray = eRecent ? eRecent.split(",") : [];
-  if (!recentArray.includes(gameID)) {
-    recentArray.push(gameID);
-    eRecent = recentArray.join(",");
-    localStorage.setItem("macvgRecents", eRecent);
-  }
-  //Above is code for adding the game to recents
-  const gameIframe = document.getElementById("game-frame");
-  gameIframe.contentWindow.focus();
-  gameIframe.contentWindow.addEventListener("click", () => {
-    gameIframe.contentWindow.focus();
-  });
-  //Above is code for ensuring iframe is focused
-  const sideSearch = document.getElementById("sideSearch");
-  const sideSearchForm = sideSearch.parentElement;
-  const nothing = document.getElementById("nothing");
-  nothing.style.paddingTop = "0px";
-  nothing.style.display = "none";
-  sideSearchForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const list = document.getElementById("list");
-    let searchTerm = sideSearch.value.toLowerCase();
-    let results = [];
-    list.innerHTML = "";
-    for (var i = 0; i < newArray.length; i++) {
-      let item = newArray[i].name;
-      var itemText = item.toLowerCase();
-      if (itemText.includes(searchTerm)) {
-        let newGameElement = document.createElement("div");
-        newGameElement.classList.add("side-game");
-        newGameElement.innerHTML = item;
-        list.appendChild(newGameElement);
-        results.push(item);
-        let newGameID = newArray[i].id;
-        newGameElement.style.backgroundImage = `url(${
-          newArray[i].link + newArray[i].thumb
-        })`;
-        newGameElement.addEventListener("click", () => {
-          const params = new URLSearchParams({ target: newGameID });
-          window.location.href = `game.html?${params.toString()}`;
-        });
+    if (gameShareBtn && gameShare) {
+      gameShareBtn.addEventListener("click", function () {
+        gameShare.classList.add("none");
+      });
+    }
+    if (report) {
+      report.addEventListener("click", function () {
+        window.open("https://forms.gle/vKN71eKeMNGiswUY7", "_blank");
+      });
+    }
+
+    var favRaw = localStorage.getItem("favorites");
+    var favoritesArray = favRaw ? favRaw.split(",").filter(Boolean) : [];
+    if (star) {
+      if (favoritesArray.indexOf(String(gameID)) !== -1) {
+        star.style.opacity = "1";
+        star.title = "Unfavorite";
       }
+      star.addEventListener("click", function () {
+        var id = String(gameID);
+        var idx = favoritesArray.indexOf(id);
+        if (idx === -1) {
+          favoritesArray.push(id);
+          star.title = "Unfavorite";
+        } else {
+          favoritesArray.splice(idx, 1);
+          star.title = "Favorite";
+        }
+        localStorage.setItem("favorites", favoritesArray.join(","));
+      });
     }
-    if (results.length < 1) {
-      nothing.style.display = "block";
-      nothing.style.paddingTop = "20px";
-      nothing.children[0].style.display = "inline";
-    } else {
-      nothing.style.paddingTop = "0px";
-      nothing.style.display = "none";
-      list.style.display = "flex";
+
+    try {
+      var eRecent = localStorage.getItem("macvgRecents");
+      var recentArray = eRecent ? eRecent.split(",").filter(Boolean) : [];
+      if (recentArray.indexOf(String(gameID)) === -1) {
+        recentArray.push(String(gameID));
+        localStorage.setItem("macvgRecents", recentArray.join(","));
+      }
+    } catch (e) {}
+
+    if (gameFrame) {
+      gameFrame.addEventListener("load", function () {
+        try {
+          gameFrame.contentWindow.focus();
+        } catch (e) {}
+      });
     }
   });
-  //Above is code for sidebar search
-  let theme = localStorage.getItem("theme");
-  if (theme === "light") {
-    const root = document.documentElement;
-    root.style.setProperty("--link", "rgb(225, 139, 9)");
-    root.style.setProperty("--text-color", "black");
-    root.style.setProperty("--shadow-color", "0px 0px 5px rgb(84, 84, 84)");
-    root.style.setProperty("--black-color", "rgb(235, 235, 235)");
-    root.style.setProperty("--bg-color", "rgb(235, 235, 235)");
-    root.style.setProperty("--bg-color-2", "rgb(30, 30, 30)");
-    root.style.setProperty("--group-bg-color", "rgb(140, 140, 140, 0.7)");
-    root.style.setProperty("--bar-color", "rgb(200, 200, 200)");
-  } else if (theme === "deep") {
-    const root = document.documentElement;
-    root.style.setProperty("--text-color", "white");
-    root.style.setProperty("--link", "rgb(225, 139, 9)");
-    root.style.setProperty("--shadow-color", "0px 5px 5px rgb(25,25,25)");
-    root.style.setProperty("--black-color", "black");
-    root.style.setProperty("--bg-color", "black");
-    root.style.setProperty("--bg-color-2", "black");
-    root.style.setProperty("--group-bg-color", "black");
-    root.style.setProperty("--bar-color", "black");
-    root.style.setProperty("--border", "rgb(50,50,50)");
-  } else if (theme === "cyber") {
-    const root = document.documentElement;
-    root.style.setProperty("--link", "rgb(225, 139, 9)");
-    root.style.setProperty("--text-color", "white");
-    root.style.setProperty("--shadow-color", "0px 5px 5px #42053f");
-    root.style.setProperty("--black-color", "black");
-    root.style.setProperty("--bg-color", "#0b023a");
-    root.style.setProperty("--bg-color-2", "#ff00a0");
-    root.style.setProperty("--group-bg-color", "rgba(48, 4, 98, 0.7)");
-    root.style.setProperty("--bar-color", "#12827e");
-    root.style.setProperty("--border", "rgb(50,50,50)");
-  } else if (theme === "custom") {
-    const root = document.documentElement;
-    let first = localStorage.getItem("first");
-    let second = localStorage.getItem("second");
-    document.documentElement.style.setProperty("--bg-color", first);
-    document.documentElement.style.setProperty("--bar-color", second);
-    document.documentElement.style.setProperty("--link", second);
-    document.documentElement.style.setProperty("--text-color", "white");
-    document.documentElement.style.setProperty("--black-color", "black");
-    root.style.setProperty("--shadow-color", "transparent");
-    root.style.setProperty("--bg-color-2", "white");
-    root.style.setProperty("--group-bg-color", second);
-  } else {
-    const root = document.documentElement;
-    root.style.setProperty("--text-color", "white");
-    root.style.setProperty("--link", "rgb(225, 139, 9)");
-    root.style.setProperty("--shadow-color", "transparent");
-    root.style.setProperty("--black-color", "black");
-    root.style.setProperty("--bg-color", "rgb(50, 50, 50)");
-    root.style.setProperty("--bg-color-2", "white");
-    root.style.setProperty("--group-bg-color", "rgba(40, 40, 40, 0.7)");
-    root.style.setProperty("--bar-color", "rgb(70, 70, 70)");
-  }
-  //Above is code for setting the theme
-  
-  //Above is code for Google Ads
-});
+})();
