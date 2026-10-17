@@ -1,3 +1,32 @@
+
+/* MacVG GX player — ads removed */
+
+  // Apply MacVG GX / legacy cloak
+  (function applyPlayerCloak() {
+    try {
+      var raw = localStorage.getItem("macvg_cloak") || localStorage.getItem("title") || "";
+      if (!raw) return;
+      var title, image;
+      if (raw.indexOf("|") >= 0) {
+        var p = raw.split("|");
+        title = p[0]; image = p[1];
+      } else {
+        var p2 = raw.split(",");
+        title = p2[0]; image = p2[1];
+      }
+      if (title) {
+        var pageTitle = document.getElementsByTagName("title")[0];
+        if (pageTitle) pageTitle.innerHTML = title;
+        var t2 = document.querySelector(".cloak");
+        if (t2) t2.textContent = title;
+      }
+      if (image) {
+        var favicon = document.querySelector(".favicon");
+        if (favicon) favicon.href = image;
+      }
+    } catch (e) {}
+  })();
+
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(window.location.search);
   const gameID = params.get("target");
@@ -30,9 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
   fullScreen.addEventListener("click", function () {
     if (document.fullscreenElement) {
       document.exitFullscreen();
-      fullScreen.src = "/macvg/media/expand.svg";
+      fullScreen.src = "media/expand.svg";
     } else {
-      fullScreen.src = "/macvg/media/compress.svg";
+      fullScreen.src = "media/compress.svg";
       gameFrame.requestFullscreen();
     }
   });
@@ -56,17 +85,17 @@ document.addEventListener("DOMContentLoaded", () => {
   //Above is code for reporting the game
   const star = document.getElementById("star");
   let existingData = localStorage.getItem("favorites");
-  let favoritesArray = existingData.split(",");
+  let favoritesArray = existingData ? existingData.split(",").filter(Boolean) : [];
   if (favoritesArray.includes(gameID)) {
-    star.src = "/macvg/media/star-solid.svg";
+    star.src = "media/star-solid.svg";
   }
   star.addEventListener("click", function () {
     if (star.src.includes("star-regular")) {
-      star.src = "/macvg/media/star-solid.svg";
+      star.src = "media/star-solid.svg";
       favoritesArray.push(gameID);
       localStorage.setItem("favorites", favoritesArray.join(","));
     } else {
-      star.src = "/macvg/media/star-regular.svg";
+      star.src = "media/star-regular.svg";
       const index = favoritesArray.indexOf(gameID);
       favoritesArray.splice(index, 1);
       localStorage.setItem("favorites", favoritesArray.join(","));
@@ -185,6 +214,6 @@ document.addEventListener("DOMContentLoaded", () => {
     root.style.setProperty("--bar-color", "rgb(70, 70, 70)");
   }
   //Above is code for setting the theme
-  (adsbygoogle = window.adsbygoogle || []).push({});
+  
   //Above is code for Google Ads
 });
