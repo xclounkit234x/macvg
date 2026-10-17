@@ -51,21 +51,16 @@
     return String(g.category || g.catagory || "").toLowerCase();
   }
 
+  var ASSET_BASE = "https://macvg-games.github.io";
+
   function thumbUrl(g) {
     var link = g.link || "";
     var thumb = g.thumb || "";
     if (!thumb && !link) return "";
     if (/^https?:\/\//i.test(thumb)) return thumb;
-    if (/^https?:\/\//i.test(link)) return link.replace(/\/?$/, "/") + thumb;
-    // relative to this site
-    var path = (link.replace(/\/?$/, "/") + thumb).replace(/^\//, "");
-    // MacVG often lives under /macvg/
-    var base = "";
-    if (location.pathname.indexOf("/macvg") !== -1) {
-      base = location.pathname.replace(/\/[^/]*$/, "/").replace(/\/$/, "");
-      if (base.indexOf("/macvg") === -1) base = "/macvg";
-    }
-    return (base ? base + "/" : "./") + path;
+    if (/^https?:\/\//i.test(link)) return link.replace(/\/?$/, "/") + (thumb || "");
+    var path = (String(link).replace(/\/?$/, "/") + thumb).replace(/^\/+/, "");
+    return ASSET_BASE + "/" + path;
   }
 
   function makeTile(g) {
